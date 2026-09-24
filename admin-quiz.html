@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>题库编辑器 · 筛选平台</title>
+<style>
+:root { color-scheme: light dark; --bg:#f5f6f8; --card:#fff; --line:#e2e5ea; --txt:#1c1f24; --mut:#6a7280; --acc:#3b82f6; --ok:#16a34a; --bad:#dc2626; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#0f1115; --card:#171a20; --line:#2a2f38; --txt:#e8eaed; --mut:#9aa3b0; --acc:#60a5fa; --ok:#4ade80; --bad:#f87171; }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font: 14px/1.6 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--txt); }
+.top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 10px 18px; background: var(--card); border-bottom: 1px solid var(--line); }
+.top h1 { font-size: 15px; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.top .sub { color: var(--mut); font-weight: 400; margin-left: 8px; }
+.wrap { max-width: 1100px; margin: 16px auto; padding: 0 16px 60px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }
+.card h2 { font-size: 13px; color: var(--mut); font-weight: 600; margin-bottom: 10px; letter-spacing: .02em; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 7px; border: 1px solid var(--line); background: var(--card); color: var(--txt); font-size: 13px; cursor: pointer; }
+.btn:hover { border-color: var(--acc); }
+.btn.pri { background: var(--acc); border-color: var(--acc); color: #fff; }
+.btn.danger { color: var(--bad); border-color: var(--bad); }
+.btn.small { padding: 3px 9px; font-size: 12px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+.tab { padding: 7px 16px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--mut); cursor: pointer; font-size: 13px; }
+.tab.on { background: var(--acc); border-color: var(--acc); color: #fff; font-weight: 600; }
+.q-card { border: 1px solid var(--line); border-radius: 9px; padding: 12px 14px; margin-bottom: 10px; background: var(--card); }
+.q-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.q-index { width: 24px; height: 24px; border-radius: 50%; background: var(--acc); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex: none; }
+.q-head .sp { flex: 1; }
+.row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+.row label.lbl { font-size: 12px; color: var(--mut); flex: none; width: 56px; }
+input[type=text], input[type=number], select { padding: 6px 9px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--txt); font-size: 13px; min-width: 0; }
+input.q { flex: 1; }
+select.media { flex: 1; min-width: 200px; }
+audio { height: 30px; max-width: 240px; }
+.opt-row { display: flex; align-items: center; gap: 8px; margin: 5px 0; }
+.opt-row input[type=text] { flex: 1; }
+.opt-row input[type=radio] { accent-color: var(--acc); }
+.opt-tag { font-size: 12px; color: var(--mut); width: 18px; }
+.mut { color: var(--mut); font-size: 12px; }
+.mt { margin-top: 8px; }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--txt); color: var(--bg); padding: 9px 18px; border-radius: 8px; font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 50; }
+.toast.show { opacity: 1; }
+.media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
+.media-item { border: 1px solid var(--line); border-radius: 8px; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+.media-item .fname { font-size: 12px; word-break: break-all; color: var(--mut); }
+.media-item audio { width: 100%; max-width: none; }
+.media-item .ops { display: flex; justify-content: space-between; align-items: center; }
+.media-item .ref { font-size: 11px; color: var(--ok); }
+.media-item .ref.bad { color: var(--bad); }
+.upload-row { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+.prog { font-size: 12px; color: var(--mut); }
+.empty { color: var(--mut); font-size: 13px; padding: 12px 0; }
+</style>
+</head>
+<body>
+<div class="top">
+  <a class="btn small" href="admin.html">← 返回管理后台</a>
+  <h1 id="ttl">题库编辑器<span class="sub" id="tsub"></span></h1>
+  <span id="saved-mark" class="sub" style="display:none">已保存</span>
+  <button class="btn pri" id="btn-save">保存题库</button>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <h2>素材库 <span class="mut">（批量选择音频/视频文件上传，上传后可试听）</span></h2>
+    <div class="upload-row">
+      <input type="file" id="file-input" multiple accept="audio/*,video/*">
+      <button class="btn" id="btn-upload">上传所选文件</button>
+      <span class="prog" id="upload-prog"></span>
+    </div>
+    <div id="media-grid" class="media-grid"><div class="empty">暂无素材，先上传音频文件。</div></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" data-part="p1">第一部分 · 客观单选</div>
+    <div class="tab" data-part="p2">第二部分 · 主观描述</div>
+    <div class="tab" data-part="p3">第三部分 · 曲式分析</div>
+  </div>
+
+  <div id="part-p1" class="part"></div>
+  <div id="part-p2" class="part" style="display:none"></div>
+  <div id="part-p3" class="part" style="display:none"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="js/admin-quiz.js"></script>
+</body>
+</html>
