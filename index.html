@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoundScreen · 任务大厅</title>
+<script src="js/theme.js"></script>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="brand"><span class="logo" id="hero-badge">测</span><h1 id="h1a">SoundScreen</h1></div>
+    <p class="subtitle" id="h1b">能力筛选任务大厅</p>
+    <p class="lede" id="lede">选择下方任务，完成对应的能力测评。</p>
+  </header>
+
+  <div class="stat-row">
+    <div class="stat" id="stat-1">-</div>
+    <div class="stat" id="stat-2">-</div>
+    <div class="stat" id="stat-3">-</div>
+  </div>
+
+  <section class="tasks">
+    <h2 id="tasks-title">全部任务</h2>
+    <p class="muted" id="tasks-sub">每人每轮仅可提交一次，客观题限时作答。</p>
+    <div id="task-grid" class="task-grid"><div class="card muted center">任务加载中…</div></div>
+    <div class="more-row"><a class="btn ghost" href="all.html">查看全部任务 →</a></div>
+  </section>
+
+  <footer class="footer">
+    <a class="muted" href="contact.html">联系我们</a>
+    <span class="muted" id="foot-note"></span>
+  </footer>
+</div>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/hall-common.js"></script>
+<script src="js/hall.js"></script>
+<script>
+(function () {
+  // 5. 首页文案：从后端 /api/site 读取（管理后台"页面设置"可编辑）
+  // config.js 稍后加载，等 load 后取 apiBase，保证 GitHub Pages / file:// 均可访问
+  function loadSite() {
+    var base = (window.SP_CONFIG && window.SP_CONFIG.apiBase) || '';
+    fetch(base + '/api/site').then(function (r) { return r.json(); }).then(function (d) {
+      var s = (d && d.site) || {};
+      function set(id, v) { var e = document.getElementById(id); if (e && v != null) e.textContent = v; }
+      set('hero-badge', s.heroBadge);
+      set('h1a', s.heroH1a); set('h1em', s.heroEm); set('h1b', s.heroH1b); set('h1c', s.heroH1c);
+      set('lede', s.lede);
+      set('tasks-title', s.tasksTitle); set('tasks-sub', s.tasksSub);
+      set('stat-1', s.stat1); set('stat-2', s.stat2); set('stat-3', s.stat3);
+    }).catch(function () {});
+  }
+  window.addEventListener('load', function () { setTimeout(loadSite, 120); });
+})();
+</script>
+</body>
+</html>
