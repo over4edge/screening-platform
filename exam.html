@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>能力筛选测评</title>
+<script src="js/theme.js"></script>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="wrap narrow">
+
+  <!-- 信息登记 -->
+  <section class="view active" id="view-landing">
+    <div class="card">
+      <div class="brand"><span class="logo" id="logo">测</span><h1 id="landing-title">能力筛选测评</h1></div>
+      <div class="subtitle" id="landing-subtitle"></div>
+      <div class="task-meta" id="landing-meta"></div>
+      <ul class="req" id="landing-req"></ul>
+    </div>
+    <div class="card">
+      <h2 style="margin:0 0 12px;font-size:17px">报名与身份信息</h2>
+      <div class="field"><label>姓名 / 编号 <span style="color:var(--bad)">*</span></label>
+        <input class="input" id="in-name" placeholder="填写招聘方提供的姓名或编号"></div>
+      <div class="field"><label>联系方式（手机/微信，选填）</label>
+        <input class="input" id="in-contact"></div>
+      <div class="field"><label>邮箱 <span style="color:var(--bad)">*</span>（用于接收结果通知）</label>
+        <input class="input" id="in-email" type="email" placeholder="name@example.com"></div>
+      <p class="muted">规则：每人每轮仅可提交一次；客观听辨题为硬门槛，限时作答、切出页面会被记录。收到招聘方复测通知时，请在原编号末尾加 <b>-R2</b>（第二次）或 <b>-R3</b>（第三次）。简历在完成测试后的飞书表单中上传。</p>
+      <div class="msg" id="landing-msg"></div>
+      <button class="btn block" id="btn-start">开始测评</button>
+    </div>
+  </section>
+
+  <!-- 第一部分 客观题 -->
+  <section class="view" id="view-part1">
+    <div class="card">
+      <h2 style="margin:0 0 4px;font-size:18px">第一部分 · 客观听辨（硬门槛）</h2>
+      <div class="exambar">
+        <span>剩余 <b id="p1-timer">--:--</b></span>
+        <span>切出页面 <b id="p1-leave">0</b> 次</span>
+        <span class="muted">共 <b id="p1-total">0</b> 题，单选</span>
+      </div>
+    </div>
+    <div id="p1-list"></div>
+    <div class="msg center" id="part1-msg"></div>
+    <button class="btn block" id="btn-p1-submit">提交第一部分</button>
+  </section>
+
+  <!-- 第一部分结果 -->
+  <section class="view" id="view-part1result">
+    <div class="card center">
+      <div class="ring" id="p1-ring"><span id="p1-num">-</span></div>
+      <div class="verdict" id="p1-verdict"></div>
+      <div class="subtitle" id="p1-verdict-sub"></div>
+    </div>
+    <div class="card" id="p1-detail-card">
+      <h2 style="margin:0 0 8px;font-size:16px">作答回顾</h2>
+      <div id="p1-result-body"></div>
+    </div>
+    <div class="card" id="p1-next"></div>
+  </section>
+
+  <!-- 第二部分 主观 -->
+  <section class="view" id="view-part2">
+    <div class="card">
+      <h2 style="margin:0 0 4px;font-size:18px" id="p2-title">第二部分</h2>
+      <div class="subtitle" id="p2-intro"></div>
+    </div>
+    <div id="p2-list"></div>
+    <div class="msg center" id="part2-msg"></div>
+    <button class="btn block" id="btn-p2-submit">提交第二部分</button>
+  </section>
+
+  <!-- 第三部分 曲式分析（仅音乐） -->
+  <section class="view" id="view-part3">
+    <div class="card">
+      <h2 style="margin:0 0 4px;font-size:18px">第三部分 · 曲式结构分析</h2>
+      <div class="subtitle">在频谱上按住拖动框选一段区间，松开后选择或填写结构名称（前奏/主歌/副歌/间奏/尾奏/桥段，也可自定义）；点"试听"可回放验证。可标注多个段落，也允许留空提交。最后一首为完整时长曲目。</div>
+    </div>
+    <div id="p3-list"></div>
+    <div class="msg center" id="part3-msg"></div>
+    <button class="btn block" id="btn-p3-submit">提交并完成测评</button>
+  </section>
+
+  <!-- 最终结果 -->
+  <section class="view" id="view-result">
+    <div class="card center">
+      <h2 style="margin:0 0 6px;font-size:19px" id="res-title">测评已提交</h2>
+      <div class="codebox" id="res-code"></div>
+      <div class="subtitle" id="res-score"></div>
+      <div id="res-note" class="muted" style="margin:8px 0 16px"></div>
+      <div id="res-actions"></div>
+    </div>
+  </section>
+
+</div>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/player.js"></script>
+<script src="js/spectrum.js"></script>
+<script src="js/exam.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>候选人答卷 · 内部批改</title>
+<script src="js/theme.js"></script>
+<link rel="stylesheet" href="css/app.css">
+<style>
+#print-sheet{display:none}
+.opt.rv-good{border-color:var(--ok);background:rgba(47,165,106,.1)}
+.opt.rv-good .optkey{background:var(--ok);color:#fff}
+.opt.rv-bad{border-color:var(--bad);background:rgba(224,86,111,.1)}
+.opt.rv-bad .optkey{background:var(--bad);color:#fff}
+.opt.rv-pick{font-weight:700}
+.rate-row{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13.5px}
+.rate-row input{width:80px}
+.ans-text{white-space:pre-wrap;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:14px;margin:8px 0}
+@media print{
+  body{background:#fff}
+  #screen,.no-print{display:none!important}
+  #print-sheet{display:block!important}
+  .ps-title{font-size:20px;font-weight:800;text-align:center}
+  .ps-sub{text-align:center;color:#555;font-size:12px;margin:2px 0 14px}
+  .ps-kv{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 16px;font-size:13px;margin-bottom:12px}
+  .ps-h{font-weight:700;margin:14px 0 6px;border-bottom:1px solid #999;padding-bottom:3px}
+  .ps-item{font-size:12.5px;margin:6px 0;white-space:pre-wrap}
+  .ps-line{border-top:1px dashed #999;margin:16px 0 8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap narrow">
+  <div id="screen">
+    <div class="footer-nav" style="margin-bottom:10px">
+      <a href="admin.html" class="muted">← 返回管理后台</a>
+    </div>
+    <div id="rv-root"><div class="card muted center">答卷加载中…</div></div>
+  </div>
+  <div id="print-sheet"></div>
+</div>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/player.js"></script>
+<script src="js/spectrum.js"></script>
+<script src="js/review.js"></script>
+</body>
+</html>
